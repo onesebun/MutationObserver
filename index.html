@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>MutationObserver</title>
+</head>
+
+<body>
+
+  <script>
+    function watermark() {
+      var watermarkNode = document.createElement('div')
+      const styleString = `
+        opacity: 0.5;
+        color: black;
+        position: absolute;
+        font-size: 120px;
+        right: 0;
+        left: 0;
+        transform: rotate(333deg);
+        -webkit-transform: rotate(333deg);`
+      watermarkNode.setAttribute('style', styleString)
+      watermarkNode.classList.add('watermark')
+      watermarkNode.textContent = "simple";
+      document.body.appendChild(watermarkNode)
+
+      const observer = new MutationObserver(() => {
+        const ins = document.querySelector('.watermark')
+        if (!ins) {
+          alert('watermark removed!')
+          document.body.appendChild(watermarkNode)
+        }
+        if (ins.getAttribute('style') !== styleString) {
+          alert('watermark updated!')
+          ins.setAttribute('style', styleString)
+        }
+      })
+
+      observer.observe(document.body, {
+        childList: true,
+        attributes: true,
+        subtree: true
+      })
+    }
+    watermark()
+  </script>
+
+</body>
+
+</html>
